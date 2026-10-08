@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-"""Prototype 1 algorithm name.
+"""Prototype 2 algorithm name.
 
 Fill in here later with a description of the algorithm.
 
