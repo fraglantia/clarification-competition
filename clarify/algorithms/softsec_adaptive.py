@@ -19,6 +19,14 @@
    weighted improvements, regressions, and requirement-preservation checks; otherwise, the selected
    implementation is retained.
 
+Main pipeline per task: draft (plan, then code under the most conventional reading) -> restate in
+plain words what the code does -> ask what must change -> read the reply (one-word label; stop if
+it only confirms) -> revise against all replies -> repeat until confirmed, unchanged, max_questions
+or env.can_ask() is false -> stages 2-6 -> finalize (definitions only, `from __future__ import
+annotations`, lower-case alias of the entry point, and a call wrapper that runs the direct call
+first and only retries with adjusted arguments if it raises). If a refinement stage fails, the
+clarified code is returned.
+
 The only configurable parameter is max_questions (default 10); all other settings are fixed.
 
 Team: SoftSec
