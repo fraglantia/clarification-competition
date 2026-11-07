@@ -1,18 +1,23 @@
 # SPDX-FileCopyrightText: 2026 Steve Gustaman <stevegustaman@softsec.kaist.ac.kr>
 # SPDX-License-Identifier: MIT
-"""SoftSecAdaptive: adaptive clarification, then evidence-checked review and test-based repair.
+"""SoftSecAdaptive: adaptive clarification, then requirement-based review and test-based repair.
 
-Clarification is an adaptive restate-and-ask loop: draft code under the most conventional reading, restate
-in plain words what it does, ask the user what must change, and revise against all replies until the
-user confirms, a reply changes nothing, or max_questions is reached (switching to one-fact questions
-when first replies are mostly vague).
-
-The clarified code is then refined: requirement units are compiled from the original prompt and the
-actual answers (each with quoted evidence), the code is reviewed against them, and a repair is kept
-only if it preserves unrelated behaviour. Finally, generated test cases are run through
-env.exec_code and one repair is kept only if it measurably improves the results; otherwise the
-clarified code is returned. The returned program is finalized as before (definitions
-only, lower-case alias of the entry point, call wrapper that retries only if the direct call raises).
+1. Adaptive clarification: uses accumulated answer statistics to choose numbered or focused
+   questions, then iteratively revises an initial implementation using actual user answers.
+2. Requirement consolidation: builds an audited, source-linked requirement inventory from the original
+   statement and recorded answers. Explicit user corrections take precedence over conflicting
+   statement content within their scope.
+3. Implementation review: identifies concrete requirement violations and attempts bounded,
+   independently reviewed changes while preserving the clarification checkpoint.
+4. Test generation and execution: generates Python test inputs and two separate reference
+   implementations, then executes them through env.exec_code. Reference agreement supplies expected
+   outputs, with explicit source examples taking priority.
+5. Checkpoint comparison: when test findings justify reconsideration, compares the current
+   implementation with the clarification checkpoint on the same test set and selects a candidate
+   using reviewed, weighted evidence.
+6. Targeted repair: attempts a focused repair for remaining confirmed defects. Adoption considers
+   weighted improvements, regressions, and requirement-preservation checks; otherwise, the selected
+   implementation is retained.
 
 The only configurable parameter is max_questions (default 10); all other settings are fixed.
 
