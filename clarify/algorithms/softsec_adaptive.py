@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Steve Gustaman <stevegustaman@softsec.kaist.ac.kr>
 # SPDX-License-Identifier: MIT
-"""SoftSec v3.8.9: adaptive clarification, then evidence-checked review and test-based repair.
+"""SoftSecAdaptive: adaptive clarification, then evidence-checked review and test-based repair.
 
-Clarification is the SoftSecAdaptive loop: draft code under the most conventional reading, restate
+Clarification is an adaptive restate-and-ask loop: draft code under the most conventional reading, restate
 in plain words what it does, ask the user what must change, and revise against all replies until the
 user confirms, a reply changes nothing, or max_questions is reached (switching to one-fact questions
 when first replies are mostly vague).
@@ -11,7 +11,7 @@ The clarified code is then refined: requirement units are compiled from the orig
 actual answers (each with quoted evidence), the code is reviewed against them, and a repair is kept
 only if it preserves unrelated behaviour. Finally, generated test cases are run through
 env.exec_code and one repair is kept only if it measurably improves the results; otherwise the
-clarified code is returned. The returned program is finalized as in SoftSecAdaptive (definitions
+clarified code is returned. The returned program is finalized as before (definitions
 only, lower-case alias of the entry point, call wrapper that retries only if the direct call raises).
 
 The only configurable parameter is max_questions (default 10); all other settings are fixed.
@@ -7266,7 +7266,7 @@ def _run_tc6(algorithm, env, problem, *, repair=False):
     return submitted
 
 
-class V3_8_9(_ConservativeBase6):
+class SoftSecAdaptive(_ConservativeBase6):
     """Adaptive first, evidence-weighted review, then confirmed TC repair.
 
     Reference agreement and passing samples are evidence, never a proof of correctness.
